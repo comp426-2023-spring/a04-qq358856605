@@ -1,31 +1,23 @@
 {
-  "name": "node-rpsls",
+  "name": "a04-qq358856605",
   "version": "1.0.0",
-  "description": " rock-paper-scissors functions in API endpoints using Express.js",
-  "main": "./lib/rpsls.js",
+  "description": "This assignment will help you stand up a web API using Express and the module that you produced for a03.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-
+    "test": "node server.js --port=5555"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/comp426-2023-spring/a03-maxxuUNC33.git"
+    "url": "git@github.com:comp426-2023-spring/a04-qq358856605.git"
   },
-  "keywords": [
-    "rock-paper-scissors",
-  ],
-  "bin": {
-    "node-rps": "./bin/rps-cli.js",
-    "node-rpsls": "./bin/rpsls-cli.js"
-  },
-  "type":"module",
-  "author": "qq358856605",
-  "license": "MIT",
+  "author": "@kevindai2002",
+  "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/comp426-2023-spring/a03-maxxuUNC33/issues"
+    "url": "git@github.com:comp426-2023-spring/a04-qq358856605/issues"
   },
-  "homepage": "https://github.com/comp426-2023-spring/a03-maxxuUNC33#readme",
   "dependencies": {
+    "express": "^4.18.2",
     "minimist": "^1.2.8"
-  }
+  },
+  "type": "module"
 }

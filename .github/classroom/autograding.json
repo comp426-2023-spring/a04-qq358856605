@@ -1,17 +1,127 @@
 {
   "tests": [
     {
-      "name": "Link command works",
+      "name": "Root endpoint",
       "setup": "npm install",
-      "run": "npm link",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/ && sleep 5s",
       "input": "",
-      "output": "",
+      "output": "200 OK",
       "comparison": "included",
+      "timeout": 10,
+      "points": 2500
+    },
+    {
+      "name": "Nonexistent endpoint",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/nonexistent/ && sleep 5s",
+      "input": "",
+      "output": "404 NOT FOUND",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2500
+    },
+    {
+      "name": "Main file defined in package.json",
+      "setup": "",
+      "run": "cat package.json",
+      "input": "",
+      "output": "\"main\": \"server.js\"",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2500
+    },
+    {
+      "name": "Play RPS",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/rps/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors)\"}",
+      "comparison": "regex",
       "timeout": 10,
       "points": 5000
     },
     {
-      "name": "Node Version",
+      "name": "Play RPSLS",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/rpsls/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors|lizard|spock)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Test script",
+      "setup": "",
+      "run": "(timeout --signal=SIGINT 5 npm test; exit 0) & sleep 1s && curl -s http://localhost:5555/app/ && sleep 5s",
+      "input": "",
+      "output": "200 OK",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2500
+    },
+    {
+      "name": "Play RPS against an opponent URLEncoded",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s -G --data-urlencode \"shot=${SHOT}\" http://localhost:${PORT}/app/rps/play/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors)\",\"opponent\":\"(rock|paper|scissors)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Play RPSLS against an opponent URLEncoded",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors lizard spock)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s -G --data \"shot=${SHOT}\" http://localhost:${PORT}/app/rpsls/play/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors|lizard|spock)\",\"opponent\":\"(rock|paper|scissors|lizard|spock)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Play RPS against an opponent JSON",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s -X POST -H \"Content-Type: application/json\" --data '{\"shot\":\"'${SHOT}'\"}' http://localhost:${PORT}/app/rps/play/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors)\",\"opponent\":\"(rock|paper|scissors)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Play RPSLS against an opponent JSON",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors lizard spock)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s -X POST -H \"Content-Type: application/json\" --data '{\"shot\":\"'${SHOT}'\"}' http://localhost:${PORT}/app/rpsls/play/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors|lizard|spock)\",\"opponent\":\"(rock|paper|scissors|lizard|spock)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Play RPS against an opponent parameter",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/rps/play/${SHOT}/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors)\",\"opponent\":\"(rock|paper|scissors)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Play RPSLS against an opponent parameter",
+      "setup": "",
+      "run": "PORT=\"$(shuf -i 2000-65535 -n 1)\"; SHOT=\"$(shuf -n1 -e rock paper scissors lizard spock)\"; (timeout --signal=SIGINT 5 node server.js --port=$PORT; exit 0) & sleep 1s && curl -s http://localhost:${PORT}/app/rpsls/play/${SHOT}/ && sleep 5s",
+      "input": "",
+      "output": "{\"player\":\"(rock|paper|scissors|lizard|spock)\",\"opponent\":\"(rock|paper|scissors|lizard|spock)\",\"result\":\"(win|lose|tie)\"}",
+      "comparison": "regex",
+      "timeout": 10,
+      "points": 5000
+    },
+    {
+      "name": "Node version",
       "setup": "",
       "run": "node -v",
       "input": "",
@@ -19,106 +129,6 @@
       "comparison": "included",
       "timeout": 10,
       "points": null
-    },
-    {
-      "name": "Play Rock Paper Scissors without opponent",
-      "setup": "",
-      "run": "node-rps",
-      "input": "",
-      "output": "{\"player\":\"([R|r]ock|[P|p]aper|[S|s]cissors)\"}",
-      "comparison": "regex",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "Play Rock Paper Scissors Lizard Spock without an opponent",
-      "setup": "",
-      "run": "node-rpsls",
-      "input": "",
-      "output": "{\"player\":\"([R|r]ock|[P|p]aper|[S|s]cissors|[L|l]izard|[S|s]pock)\"}",
-      "comparison": "regex",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "Play Rock Paper Scissors with an opponent",
-      "setup": "echo 'SHOT=(\"rock\" \"paper\" \"scissors\") && echo ${SHOT[$RANDOM % ${#SHOT[@]} ]} && node-rps $SHOT' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "{\"player\":\"([R|r]ock|[P|p]aper|[S|s]cissors)\",\"opponent\":\"([R|r]ock|[P|p]aper|[S|s]cissors)\",\"result\":\"([T|t]ie|[L|l]ose|[W|w]in)\"}",
-      "comparison": "regex",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "Play Rock Paper Scissors Lizard Spock with an opponent",
-      "setup": "echo 'SHOT=(\"rock\" \"paper\" \"scissors\" \"lizard\" \"spock\") && echo ${SHOT[$RANDOM % ${#SHOT[@]} ]} && node-rpsls $SHOT' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "{\"player\":\"([R|r]ock|[P|p]aper|[S|s]cissors|[L|l]izard|[S|s]pock)\",\"opponent\":\"([R|r]ock|[P|p]aper|[S|s]cissors|[L|l]izard|[S|s]pock)\",\"result\":\"([T|t]ie|[L|l]ose|[W|w]in)\"}",
-      "comparison": "regex",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "RPS Help",
-      "setup": "echo 'HELP=(\"-h\" \"--help\") && echo ${HELP[$RANDOM % ${#HELP[@]} ]} && node-rps $HELP' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "display this help message and exit",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "RPSLS Help",
-      "setup": "echo 'HELP=(\"-h\" \"--help\") && echo ${HELP[$RANDOM % ${#HELP[@]} ]} && node-rpsls $HELP' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "display this help message and exit",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "RPS Rules",
-      "setup": "echo 'RULES=(\"-r\" \"--rules\") && echo ${RULES[$RANDOM % ${#RULES[@]} ]} && node-rps $RULES' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "Paper COVERS Rock",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "RPSLS Rules",
-      "setup": "echo 'RULES=(\"-r\" \"--rules\") && echo ${RULES[$RANDOM % ${#RULES[@]} ]} && node-rpsls $RULES' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "Spock SMASHES Scissors",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 5000
-    },
-    {
-      "name": "RPS out of range",
-      "setup": "echo 'SHOT=(\"lizard\" \"spock\") && echo ${SHOT[$RANDOM % ${#SHOT[@]} ]} && node-rps $SHOT' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "Rules for Rock Paper Scissors:",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 2500
-    },
-    {
-      "name": "RPSLS out of range",
-      "setup": "echo 'SHOT=(\"Data\" \"leaf\" \"hammer\" \"pencil\" \"mouse\") && echo ${SHOT[$RANDOM % ${#SHOT[@]} ]} && node-rpsls $SHOT' > temp.sh",
-      "run": "bash temp.sh; rm temp.sh",
-      "input": "",
-      "output": "Rules for the Lizard-Spock Expansion of Rock Paper Scissors:",
-      "comparison": "included",
-      "timeout": 10,
-      "points": 2500
     }
   ]
 }
