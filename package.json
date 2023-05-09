@@ -1,0 +1,31 @@
+{
+  "name": "node-rpsls",
+  "version": "1.0.0",
+  "description": " rock-paper-scissors functions in API endpoints using Express.js",
+  "main": "./lib/rpsls.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comp426-2023-spring/a03-maxxuUNC33.git"
+  },
+  "keywords": [
+    "rock-paper-scissors",
+  ],
+  "bin": {
+    "node-rps": "./bin/rps-cli.js",
+    "node-rpsls": "./bin/rpsls-cli.js"
+  },
+  "type":"module",
+  "author": "qq358856605",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/comp426-2023-spring/a03-maxxuUNC33/issues"
+  },
+  "homepage": "https://github.com/comp426-2023-spring/a03-maxxuUNC33#readme",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  }
+}
